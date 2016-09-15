@@ -17,6 +17,7 @@
 # If a player is behind it may be in his/her best interest to make "risky" guesses
 
 import math
+import tkinter
 
 numCharacters = 24
 # P1WinPercent[n-1][m-1] is P1's win percentage under optimal play from both players
@@ -61,3 +62,23 @@ for totalCharactersLeft in range(2,2*numCharacters+1):
 #print win percentages and best moves
 print(P1WinPercent)
 print(P1BestMove)
+
+squareWidth = 20
+boundaryWidth = 20
+display = tkinter.Tk()
+screenWidth = 2*boundaryWidth + numCharacters*squareWidth
+display.geometry(str(screenWidth) + "x" + str(screenWidth))
+
+c = tkinter.Canvas(display, height=squareWidth*numCharacters, width=squareWidth*numCharacters)
+c.pack()
+
+for i in range(numCharacters):
+    for j in range(numCharacters):
+        x = i*squareWidth
+        y = (numCharacters - j - 1)*squareWidth
+        colorValue = int(255*(1-P1WinPercent[i][j]))
+        squareColor = hex((colorValue<<16) | (colorValue<<8) | colorValue)
+        squareColor = "#" + squareColor[2:].zfill(6)
+        c.create_rectangle(x,y,x+squareWidth,y+squareWidth,fill=squareColor, outline='')
+
+display.mainloop()
