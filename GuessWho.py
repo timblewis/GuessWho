@@ -63,22 +63,35 @@ for totalCharactersLeft in range(2,2*numCharacters+1):
 print(P1WinPercent)
 print(P1BestMove)
 
+#variables used to create table visualization
 squareWidth = 20
 boundaryWidth = 20
+#create display to display table
 display = tkinter.Tk()
 screenWidth = 2*boundaryWidth + numCharacters*squareWidth
 display.geometry(str(screenWidth) + "x" + str(screenWidth))
 
+#canvas to draw the visualization table for
 c = tkinter.Canvas(display, height=squareWidth*numCharacters, width=squareWidth*numCharacters)
-c.pack()
+#pack the canvas and allow it to expand when boundaries are changed
+c.pack(expand = True)
 
+#for each entry in the table
 for i in range(numCharacters):
     for j in range(numCharacters):
+        #find the position on the canvas that square should be put
         x = i*squareWidth
         y = (numCharacters - j - 1)*squareWidth
-        colorValue = int(255*(1-P1WinPercent[i][j]))
-        squareColor = hex((colorValue<<16) | (colorValue<<8) | colorValue)
+        #the rgb values associated with the color corresponding to the win percentage at that entry
+        redValue = int(255*(1-P1WinPercent[i][j]))
+        greenValue = 0
+        blueValue = int(255*P1WinPercent[i][j])
+        #the hex value representing the colors
+        squareColor = hex((redValue<<16) | (greenValue<<8) | blueValue)
+        #remove the first two characters "0x" and lead with "#" and add leading 0's
         squareColor = "#" + squareColor[2:].zfill(6)
+        #draw the square for the given entry
         c.create_rectangle(x,y,x+squareWidth,y+squareWidth,fill=squareColor, outline='')
 
+#start the display
 display.mainloop()
